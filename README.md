@@ -1,5 +1,4 @@
 Rival Chess Generator
 =====================
 
-Console application to generate matches between engines. Matches are placed on a queue, to be picked up by a client that
-can play the match and report the result.
+Rest API to generate match requests and place them on a queue.
