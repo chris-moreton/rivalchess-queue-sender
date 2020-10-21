@@ -1,6 +1,6 @@
 package com.netsensia.rivalchess.generator
 
-import com.netsensia.rivalchess.service.JmsSender
+import com.netsensia.rivalchess.utils.JmsSender
 import com.netsensia.rivalchess.vie.model.EngineSetting
 import com.netsensia.rivalchess.vie.model.EngineSettings
 import com.netsensia.rivalchess.vie.model.MultiMatch
@@ -26,7 +26,7 @@ fun createMatches(engineSettings: EngineSettings, nodeVariation: Int, matchCount
                 modifyEngineSettings(engineSettings.engine2, nodeVariation)
         )
         println(newEngineSettings)
-        JmsSender.send(newEngineSettings)
+        JmsSender.send("MatchRequests", newEngineSettings)
         createMatches(engineSettings, nodeVariation, matchCount - 1)
     }
 }
