@@ -1,11 +1,35 @@
 package com.netsensia.rivalchess.generator
 
 import com.netsensia.rivalchess.service.JmsSender
+import com.netsensia.rivalchess.vie.model.EngineSetting
+import com.netsensia.rivalchess.vie.model.EngineSettings
+import com.netsensia.rivalchess.vie.model.MultiMatch
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.random.Random
+
+fun modifyEngineSettings(engineSetting: EngineSetting, nodeVariation: Int): EngineSetting {
+    val nodes = engineSetting.maxNodes
+    val halfWindow = (nodes / 100) * nodeVariation
+    val r = Random.nextInt(halfWindow * 2)
+    val newNodes = (nodes - halfWindow) + r
+    return EngineSetting(engineSetting.version, newNodes, engineSetting.maxMillis,engineSetting.openingBook)
+}
+
+fun createMatches(engineSettings: EngineSettings, nodeVariation: Int, matchCount: Int) {
+    if (matchCount > 0) {
+        val newEngineSettings = EngineSettings(
+                modifyEngineSettings(engineSettings.engine1, nodeVariation),
+                modifyEngineSettings(engineSettings.engine2, nodeVariation)
+        )
+        println(newEngineSettings)
+        JmsSender.send(newEngineSettings)
+        createMatches(engineSettings, nodeVariation, matchCount - 1)
+    }
+}
 
 @RestController
 class GreetingController {
@@ -13,8 +37,12 @@ class GreetingController {
     val counter = AtomicLong()
 
     @PostMapping("/matchRequest")
-    fun matchRequest(@RequestBody matchRequestPayload: MatchRequestPayload): ResponseEntity<MatchResponsePayload> {
-        JmsSender.send(matchRequestPayload)
+    fun matchRequest(@RequestBody matchRequestPayload: MultiMatch): ResponseEntity<MatchResponsePayload> {
+        createMatches(
+                matchRequestPayload.engineSettings,
+                matchRequestPayload.nodeVariationPercent,
+                matchRequestPayload.matchCount)
+
         return ResponseEntity.accepted().body(MatchResponsePayload())
     }
 }

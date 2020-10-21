@@ -1,10 +1,8 @@
 package com.netsensia.rivalchess.service
 
 import com.google.gson.Gson
-import com.netsensia.rivalchess.generator.MatchRequestPayload
-import org.apache.activemq.ActiveMQConnection
+import com.netsensia.rivalchess.vie.model.EngineSettings
 import org.apache.activemq.ActiveMQConnectionFactory
-import javax.jms.ConnectionFactory
 import javax.jms.Destination
 import javax.jms.JMSException
 import javax.jms.Session
@@ -19,7 +17,7 @@ object JmsSender {
     private const val subject = "RivalMatchQueue" // Queue Name.You can create any/many queue names as per your requirement.
     @Throws(JMSException::class)
     @JvmStatic
-    fun send(message: MatchRequestPayload) {
+    fun send(message: EngineSettings) {
         // Getting JMS connection from the server and starting it
         val connectionFactory = ActiveMQConnectionFactory(url)
         connectionFactory.userName = user
