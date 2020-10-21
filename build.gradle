@@ -44,14 +44,11 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    compile 'org.apache.activemq:activemq-spring:5.14.3'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile 'com.netsensia.rivalchess:rivalchess-vie-model:3.0.0'
-    compile 'com.netsensia.rivalchess:rivalchess-vie-utils:3.0.0'
+    compile 'com.netsensia.rivalchess:rivalchess-vie-utils:4.0.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    implementation 'com.google.code.gson:gson:2.8.5'
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3'
 }
 
 test {
