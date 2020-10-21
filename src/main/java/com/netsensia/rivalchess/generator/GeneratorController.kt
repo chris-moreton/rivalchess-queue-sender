@@ -21,10 +21,11 @@ fun modifyEngineSettings(engineSetting: EngineSetting, nodeVariation: Int): Engi
 
 fun createMatches(engineSettings: EngineSettings, nodeVariation: Int, matchCount: Int) {
     if (matchCount > 0) {
-        val newEngineSettings = EngineSettings(
-                modifyEngineSettings(engineSettings.engine1, nodeVariation),
-                modifyEngineSettings(engineSettings.engine2, nodeVariation)
-        )
+        val whiteEngine = if (matchCount % 2 == 1) engineSettings.engine1 else engineSettings.engine2
+        val blackEngine = if (matchCount % 2 == 0) engineSettings.engine1 else engineSettings.engine2
+
+        val newEngineSettings = EngineSettings(whiteEngine, blackEngine)
+        
         println(newEngineSettings)
         JmsSender.send("MatchRequests", newEngineSettings)
         createMatches(engineSettings, nodeVariation, matchCount - 1)

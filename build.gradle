@@ -36,6 +36,10 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+configurations {
+    runtime.exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -44,11 +48,15 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile 'com.netsensia.rivalchess:rivalchess-vie-model:3.0.0'
-    compile 'com.netsensia.rivalchess:rivalchess-vie-utils:4.0.0'
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    compile("org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE") {
+        exclude group: "spring-boot-starter-log4j2"
+    }
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation 'com.netsensia.rivalchess:rivalchess-vie-model:3.0.0'
+    implementation 'com.netsensia.rivalchess:rivalchess-vie-utils:18.0.0'
 }
 
 test {
