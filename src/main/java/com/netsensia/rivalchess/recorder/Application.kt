@@ -1,4 +1,4 @@
-package com.netsensia.rivalchess.generator
+package com.netsensia.rivalchess.recorder
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

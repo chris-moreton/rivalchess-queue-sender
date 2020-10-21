@@ -1,4 +1,4 @@
-package com.netsensia.rivalchess.generator
+package com.netsensia.rivalchess.recorder
 
 import com.netsensia.rivalchess.utils.JmsSender
 import com.netsensia.rivalchess.vie.model.EngineSetting
@@ -25,7 +25,7 @@ fun createMatches(engineSettings: EngineSettings, nodeVariation: Int, matchCount
         val blackEngine = if (matchCount % 2 == 0) engineSettings.engine1 else engineSettings.engine2
 
         val newEngineSettings = EngineSettings(whiteEngine, blackEngine)
-        
+
         println(newEngineSettings)
         JmsSender.send("MatchRequests", newEngineSettings)
         createMatches(engineSettings, nodeVariation, matchCount - 1)

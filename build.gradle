@@ -29,7 +29,7 @@ apply plugin: 'io.spring.dependency-management'
 group = "com.netsensia.rivalchess"
 version = '1.0.0'
 
-jar.baseName("rivalchess-generator")
+jar.baseName("rivalchess-vie-generator")
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource

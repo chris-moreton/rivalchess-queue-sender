@@ -1,4 +1,4 @@
-package com.netsensia.rivalchess.generator
+package com.netsensia.rivalchess.recorder
 
 import org.junit.Test
 
