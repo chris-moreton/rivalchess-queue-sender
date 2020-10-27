@@ -3,13 +3,7 @@ package com.netsensia.rivalchess.recorder
 import com.netsensia.rivalchess.utils.JmsSender
 import com.netsensia.rivalchess.vie.model.EngineSetting
 import com.netsensia.rivalchess.vie.model.EngineSettings
-import com.netsensia.rivalchess.vie.model.MultiMatch
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.atomic.AtomicLong
+import com.netsensia.rivalchess.vie.model.TournamentType
 import kotlin.random.Random
 
 fun modifyEngineSettings(engineSetting: EngineSetting, nodeVariation: Int): EngineSetting {
@@ -35,23 +29,6 @@ fun createMatches(engineSettings: EngineSettings, nodeVariation: Int, matchCount
     }
 }
 
-@RestController
-class GreetingController {
+fun createTournament(engineSettings: List<EngineSetting>, tournamentType: TournamentType, nodeVariation: Int, roundCount: Int) {
 
-    val counter = AtomicLong()
-
-    @PostMapping("/matchRequest")
-    fun matchRequest(@RequestBody matchRequestPayload: MultiMatch): ResponseEntity<MatchResponsePayload> {
-        createMatches(
-                matchRequestPayload.engineSettings,
-                matchRequestPayload.nodeVariationPercent,
-                matchRequestPayload.matchCount)
-
-        return ResponseEntity.accepted().body(MatchResponsePayload())
-    }
-
-    @GetMapping("/health")
-    fun health(): ResponseEntity<String> {
-        return ResponseEntity.ok().body("ok")
-    }
 }

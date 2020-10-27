@@ -54,7 +54,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation 'com.netsensia.rivalchess:rivalchess-vie-model:3.0.0'
+    implementation 'com.netsensia.rivalchess:rivalchess-vie-model:4.0.0'
     implementation 'com.netsensia.rivalchess:rivalchess-vie-utils:18.0.0'
 }
 
