@@ -1,36 +1,44 @@
 package com.netsensia.rivalchess.recorder
 
+import com.netsensia.rivalchess.utils.JmsSender
 import com.netsensia.rivalchess.vie.model.MultiMatch
 import com.netsensia.rivalchess.vie.model.Tournament
+import jdk.nashorn.internal.objects.Global
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.atomic.AtomicLong
+import kotlinx.coroutines.*
 
 @RestController
 class Controller {
 
-    val counter = AtomicLong()
+    val jmsSender = JmsSender
 
     @PostMapping("/matchRequest")
     fun matchRequest(@RequestBody matchRequestPayload: MultiMatch): ResponseEntity<MatchResponsePayload> {
-        createMatches(
-                matchRequestPayload.engineSettings,
-                matchRequestPayload.nodeVariationPercent,
-                matchRequestPayload.matchCount)
+        GlobalScope.async {
+            createMatches(
+                    matchRequestPayload.engineMatch,
+                    matchRequestPayload.nodeVariationPercent,
+                    matchRequestPayload.matchCount,
+                    jmsSender)
+        }
 
         return ResponseEntity.accepted().body(MatchResponsePayload())
     }
 
     @PostMapping("/tournamentRequest")
     fun tournamentRequest(@RequestBody tournamentPayload: Tournament): ResponseEntity<MatchResponsePayload> {
-//        createTournament(
-//                tournamentPayload.engines,
-//                tournamentPayload.tournamentType,
-//                tournamentPayload.nodeVariationPercent,
-//                tournamentPayload.roundCount)
+        GlobalScope.async {
+            createTournament(
+                    tournamentPayload.engineSettings,
+                    tournamentPayload.tournamentType,
+                    tournamentPayload.nodeVariationPercent,
+                    tournamentPayload.roundCount,
+                    jmsSender)
+        }
 
         return ResponseEntity.accepted().body(MatchResponsePayload())
     }

@@ -47,15 +47,19 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:3.3.3'
 
     compile("org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE") {
         exclude group: "spring-boot-starter-log4j2"
     }
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation 'com.netsensia.rivalchess:rivalchess-vie-model:4.0.0'
-    implementation 'com.netsensia.rivalchess:rivalchess-vie-utils:18.0.0'
+    implementation 'com.netsensia.rivalchess:rivalchess-vie-model:5.0.0'
+    implementation 'com.netsensia.rivalchess:rivalchess-vie-utils:26.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.4.0-M1'
+
 }
 
 test {
