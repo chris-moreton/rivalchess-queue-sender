@@ -24,7 +24,7 @@ fun createMatches(engineMatch: EngineMatch, nodeVariation: Int, matchCount: Int,
                 modifyEngineMatch(blackEngine, nodeVariation))
 
         println(newEngineMatch)
-        jmsSender.send("MatchRequests", newEngineMatch)
+        jmsSender.send("MatchRequested", newEngineMatch)
         createMatches(engineMatch, nodeVariation, matchCount - 1, jmsSender)
     }
 }
