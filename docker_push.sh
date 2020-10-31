@@ -5,12 +5,11 @@ then
 fi
 
 AWS_REGION="eu-west-2"
+SERVICE_NAME="generator"
 
-./gradlew clean build -x test
-docker build --build-arg JAR_FILE=build/libs/*.jar -t rivalchess-vie-generator .
 aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 AWS_ECR_BASE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
-docker tag rivalchess-vie-generator:latest ${AWS_ECR_BASE_URI}/rivalchess-vie-generator:latest
+docker tag rivalchess-vie-${SERVICE_NAME}:latest ${AWS_ECR_BASE_URI}/rivalchess-vie-${SERVICE_NAME}:latest
 
-docker push ${AWS_ECR_BASE_URI}/rivalchess-vie-generator:latest
+docker push ${AWS_ECR_BASE_URI}/rivalchess-vie-${SERVICE_NAME}:latest
