@@ -1,6 +1,6 @@
 package com.netsensia.rivalchess.recorder
 
-import com.netsensia.rivalchess.utils.`interface`.JmsSenderInterface
+import com.netsensia.rivalchess.utils.interfaces.JmsServiceInterface
 import com.netsensia.rivalchess.vie.model.EngineSetting
 import com.netsensia.rivalchess.vie.model.EngineMatch
 import com.netsensia.rivalchess.vie.model.TournamentType
@@ -14,7 +14,11 @@ fun modifyEngineMatch(engineSetting: EngineSetting, nodeVariation: Int): EngineS
     return EngineSetting(engineSetting.version, newNodes, engineSetting.maxMillis,engineSetting.openingBook)
 }
 
-fun createMatches(engineMatch: EngineMatch, nodeVariation: Int, matchCount: Int, jmsSender: JmsSenderInterface) {
+fun createMatches(engineMatch: EngineMatch,
+                  nodeVariation: Int,
+                  matchCount: Int,
+                  jmsSender: JmsServiceInterface) {
+
     if (matchCount > 0) {
         val whiteEngine = if (matchCount % 2 == 1) engineMatch.engine1 else engineMatch.engine2
         val blackEngine = if (matchCount % 2 == 0) engineMatch.engine1 else engineMatch.engine2
@@ -34,7 +38,7 @@ fun createTournament(
         tournamentType: TournamentType,
         nodeVariation: Int,
         roundCount: Int,
-        jmsSender: JmsSenderInterface) {
+        jmsSender: JmsServiceInterface) {
 
     (0 until roundCount).forEach {
         engineMatch.forEach { white ->
@@ -42,6 +46,26 @@ fun createTournament(
                 if (white.version != black.version)
                     createMatches(EngineMatch(white, black), nodeVariation, 1, jmsSender)
             }
+        }
+    }
+}
+
+fun createGauntlet(
+        engineMatch: List<EngineSetting>,
+        tournamentType: TournamentType,
+        nodeVariation: Int,
+        roundCount: Int,
+        jmsSender: JmsServiceInterface) {
+
+    (0 until roundCount).forEach {
+        val challengerPlaysWhite = it % 2 == 0
+        val challenger = engineMatch[0]
+        engineMatch.forEach { opponent ->
+            if (challenger.version != opponent.version)
+                createMatches(EngineMatch(
+                                if (challengerPlaysWhite) challenger else opponent,
+                                if (challengerPlaysWhite) opponent else challenger),
+                                nodeVariation, 1, jmsSender)
         }
     }
 }

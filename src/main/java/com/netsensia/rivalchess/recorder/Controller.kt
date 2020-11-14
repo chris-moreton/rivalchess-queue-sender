@@ -1,9 +1,8 @@
 package com.netsensia.rivalchess.recorder
 
-import com.netsensia.rivalchess.utils.JmsSender
+import com.netsensia.rivalchess.utils.JmsService
 import com.netsensia.rivalchess.vie.model.MultiMatch
 import com.netsensia.rivalchess.vie.model.Tournament
-import jdk.nashorn.internal.objects.Global
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,7 +13,7 @@ import kotlinx.coroutines.*
 @RestController
 class Controller {
 
-    val jmsSender = JmsSender
+    val jmsService = JmsService()
 
     @PostMapping("/matchRequest")
     fun matchRequest(@RequestBody matchRequestPayload: MultiMatch): ResponseEntity<MatchResponsePayload> {
@@ -23,7 +22,7 @@ class Controller {
                     matchRequestPayload.engineMatch,
                     matchRequestPayload.nodeVariationPercent,
                     matchRequestPayload.matchCount,
-                    jmsSender)
+                    jmsService)
         }
 
         return ResponseEntity.accepted().body(MatchResponsePayload())
@@ -37,7 +36,21 @@ class Controller {
                     tournamentPayload.tournamentType,
                     tournamentPayload.nodeVariationPercent,
                     tournamentPayload.roundCount,
-                    jmsSender)
+                    jmsService)
+        }
+
+        return ResponseEntity.accepted().body(MatchResponsePayload())
+    }
+
+    @PostMapping("/gauntletRequest")
+    fun gauntletRequest(@RequestBody tournamentPayload: Tournament): ResponseEntity<MatchResponsePayload> {
+        GlobalScope.async {
+            createGauntlet(
+                    tournamentPayload.engineSettings,
+                    tournamentPayload.tournamentType,
+                    tournamentPayload.nodeVariationPercent,
+                    tournamentPayload.roundCount,
+                    jmsService)
         }
 
         return ResponseEntity.accepted().body(MatchResponsePayload())
